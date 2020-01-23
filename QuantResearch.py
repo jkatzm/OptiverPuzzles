@@ -1,3 +1,22 @@
+"""
+Three players A, B, C play the following game.
+First, A picks a real number between 0 and 1 (both inclusive),
+then B picks a number in the same range (different from A’s choice)
+and finally C picks a number, also in the same range, (different from the two chosen numbers).
+We then pick a number in the range uniformly randomly.
+Whoever’s number is closest to this random number wins the game.
+Assume that A, B and C all play optimally and their sole goal is to maximise their chances of winning.
+Also assume that if one of them has several optimal choices,
+then that player will randomly pick one of the optimal choices.
+
+--If A chooses 0, then what is the best choice for B?
+--What is the best choice for A?
+--Can you write a program to figure out the best choice for the first player
+when the game is played among four players?
+"""
+
+
+
 from random import choice
 from itertools import permutations
 from fractions import Fraction
@@ -132,20 +151,39 @@ def get_fractions():
 	return fractions
 
 
-def main():
-
-	n_players = int(input("number of players?\n"))
-	print("solving the problem for", n_players, "players...")
-
-	X = {i : [] for i in permutations(get_fractions(), n_players)}
-
-	for i in range(n_players):
-		X = make_next_dict(transform_dict(X))
-
-	print("\n...solved. optimal selections:")
-	print_dict(X, 0)
 
 
+n_players = int(input("number of players?\n"))
+print("\nsolving the problem for", n_players, "players...")
+assert(n_players > 1)
 
-if __name__== "__main__":
-	main()
+X = {i : [] for i in permutations(get_fractions(), n_players)}
+
+for i in range(n_players):
+	X = make_next_dict(transform_dict(X))
+
+print("\n...solved.\n")
+print_dict(X, 0)
+
+
+if n_players == 2:
+	print("strategy profiles:")
+	print("A : 1/2")
+	print("B : random selection from {1/2 + epsilon, 1/2 - epsilon}")
+	pass
+
+elif n_players == 3:
+	print("strategy profiles:")
+	print("A : random selection from {1/4, 3/4}")
+	print("B : {1/4 if A==3/4; 3/4 if A==1/4}")
+	print("C : random selection from (1/4, 3/4)")
+
+elif n_players == 4:
+	print("strategy profiles:")
+	print("A : random selection from {1/6, 5/6}")
+	print("B : {1/6 if A==5/6; 5/6 if A==1/6}")
+	print("C : 1/2")
+	print("D : random selection from (1/6, 1/2) U (1/2, 5/6)")
+
+
+
